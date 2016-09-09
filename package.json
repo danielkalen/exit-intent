@@ -1,6 +1,6 @@
 {
   "name": "@danielkalen/exit-intent",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The source code for Exit Intent.com",
   "main": "app.coffee",
   "devDependencies": {
