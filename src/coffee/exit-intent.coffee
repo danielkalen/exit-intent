@@ -71,7 +71,7 @@ do ($=jQuery)->
 			###
 			unless isMobile # No need to attach for mobile devices
 				$$(window).on "mouseleave.#{@name}", (mouseEvent)=>
-					@open() unless @disabled or popupOpen or mouseEvent.clientY >= 1
+					@open() unless @disabled or Popup::isOpen or mouseEvent.clientY >= 1
 
 
 
