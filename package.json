@@ -6,12 +6,14 @@
   "devDependencies": {
     "coffee-script": "^1.10.0",
     "foreach-cli": "^1.6.1",
+    "json": "^9.0.4",
     "node-sass": "^3.4.2",
     "simplyimport": "*",
     "simplywatch": "*",
     "uglify-js": "^2.6.2"
   },
   "scripts": {
+    "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run compile",
     "compile": "npm run compile:js && npm run compile:sass",
     "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i #{path} | coffee -b -s -c > dist/js/#{name}.pretty.js && uglifyjs dist/js/#{name}.pretty.js -m -c keep_fargs,unused=false -o dist/js/#{name}.js'",
