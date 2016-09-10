@@ -23,7 +23,7 @@ do ($=jQuery)->
 
 
 
-	ExitIntent.version = import '../.version.coffee'
+	ExitIntent.version = import '../../.version.coffee'
 	ExitIntent.instances = {}
 	ExitIntent.disableAll = ()-> instance.disabled = true for n,instance of ExitIntent.instances
 
