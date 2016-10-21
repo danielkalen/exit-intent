@@ -2,6 +2,7 @@ do ($=jQuery)->
 	isIE = document.all and !window.atob
 	isIE11 = window.navigator.msPointerEnabled
 	isMobile = document.documentElement.className.indexOf('mobile') isnt -1
+	defaultPopupOptions = {forceOpen:true}
 
 	###*
 	# The Exit Intent class used to instantiate Exit Intent popups.
@@ -9,9 +10,10 @@ do ($=jQuery)->
 	# @param {object} el    jQuery object referencing the form that should be inserted into the exit intent.
 	# @param {string} name  The unique name for this exit intent (will be used as an ID attr).
 	###
-	ExitIntent = ({@el, name})->
+	ExitIntent = ({@el, name, popupOptions})->
+		popupOptions = $.extend {}, defaultPopupOptions, popupOptions
 		@name = name or 'popup_'+Math.floor(Math.random() * 100000)		
-		@popup = new Popup(@el, @name)
+		@popup = new Popup(@el, @name, popupOptions)
 		@disabled = false
 		@isOpen = false
 
