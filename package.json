@@ -9,7 +9,7 @@
     "json": "^9.0.4",
     "node-sass": "^3.4.2",
     "simplyimport": "^2.3.3",
-    "simplywatch": "*",
+    "simplywatch": "^2.3.2",
     "uglify-js": "^2.6.2"
   },
   "scripts": {
