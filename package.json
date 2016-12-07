@@ -12,6 +12,10 @@
     "simplywatch": "^2.3.2",
     "uglify-js": "^2.6.2"
   },
+  "peerDependencies": {
+    "jquery": "*",
+    "@danielkalen/popup-engine": "^3.0.0"
+  },
   "scripts": {
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run compile",
