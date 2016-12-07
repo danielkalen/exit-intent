@@ -1,6 +1,6 @@
 {
   "name": "@danielkalen/exit-intent",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Exit Intent Engine",
   "main": "app.coffee",
   "devDependencies": {
