@@ -18,16 +18,10 @@
   },
   "scripts": {
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
-    "build": "npm run compile",
-    "compile": "npm run compile:js && npm run compile:sass",
-    "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i #{path} | coffee -b -s -c > dist/js/#{name}.pretty.js && uglifyjs dist/js/#{name}.pretty.js -m -c keep_fargs,unused=false -o dist/js/#{name}.js'",
-    "compile:sass": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed #{path} --output dist/css/'",
-    "compile:sass:pretty": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style nested #{path} --output dist/css/'",
-    "watch": "npm run watch:js & npm run watch:sass",
-    "watch:js": "simplywatch -g 'src/coffee/*' -x 'simplyimport -i #{path} | coffee -b -s -c > dist/js/#{name}.pretty.js && uglifyjs dist/js/#{name}.pretty.js -m -c keep_fargs,unused=false > dist/js/#{name}.js'",
-    "watch:sass": "simplywatch -g 'src/sass/*' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed #{path} --output dist/css/'",
-    "updatedeps": "npm run updatedeps:gv",
-    "updatedeps:gv": "cp -f dist/* ~/Projects/getvoip/gv_main/wp-content/plugins/getvoip-campaign/assets/"
+    "build": "npm run build:pretty && npm run build:ugly",
+    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/js/exit-intent.pretty.js && uglifyjs dist/js/exit-intent.pretty.js -m -c keep_fargs,unused=false -o dist/js/exit-intent.js",
+    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/js/exit-intent.pretty.js && cp -f dist/js/exit-intent.pretty.js dist/js/exit-intent.js",
+    "watch": "simplywatch -g 'src/*' -x 'npm run build:pretty -s'"
   },
   "repository": {
     "type": "git",

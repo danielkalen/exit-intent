@@ -12,8 +12,8 @@ do ($=jQuery)->
 	###
 	ExitIntent = ({@el, name, popupOptions})->
 		popupOptions = $.extend {}, defaultPopupOptions, popupOptions
-		@name = name or 'popup_'+Math.floor(Math.random() * 100000)		
 		@popup = new Popup(@el, @name, popupOptions)
+		@name = @popup.name
 		@disabled = false
 		@isOpen = false
 
@@ -42,10 +42,10 @@ do ($=jQuery)->
 
 	ExitIntent::emit = (event)->
 		@el.trigger(event)
-		@popup.el.trigger(event)
+		@popup.emit(event)
 
 	ExitIntent::replaceWith = ($newForm)->
-		@popup.el.children('.popup-content').html $newForm
+		@popup.replaceWith($newForm)
 		@attachMiscEvents()
 
 
@@ -81,12 +81,6 @@ do ($=jQuery)->
 	
 
 	ExitIntent::attachMiscEvents = ()->
-		$('.popup-overlay').on "click.#{@name}", (event)=>
-			$overlay = $(event.currentTarget)
-			isExitIntentOverlay = $overlay.hasClass 'belongs_to_exit-intent'
-			@popup.el.trigger 'closed' if isExitIntentOverlay
-
-
 		@el.find('.no').on "click.#{@name}", ()=>
 			@close()
 			try localStorage.setItem 'exit_intent-complete', 'true'
@@ -103,7 +97,6 @@ do ($=jQuery)->
 
 
 	ExitIntent::detachEvents = ()->
-		$('.popup-overlay').off "click.#{@name}"
 		@el.find('.no').off "click.#{@name}"
 		@el.find('.submit').off "click.#{@name}"
 		@el.find('.step').first().find('.next').off "click.#{@name}"
