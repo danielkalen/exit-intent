@@ -19,8 +19,8 @@
   "scripts": {
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run build:pretty && npm run build:ugly",
-    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/js/exit-intent.pretty.js && uglifyjs dist/js/exit-intent.pretty.js -m -c keep_fargs,unused=false -o dist/js/exit-intent.js",
-    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/js/exit-intent.pretty.js && cp -f dist/js/exit-intent.pretty.js dist/js/exit-intent.js",
+    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.pretty.js && uglifyjs dist/exit-intent.pretty.js -m -c keep_fargs,unused=false -o dist/exit-intent.js",
+    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.pretty.js && cp -f dist/exit-intent.pretty.js dist/exit-intent.js",
     "watch": "simplywatch -g 'src/*' -x 'npm run build:pretty -s'"
   },
   "repository": {
