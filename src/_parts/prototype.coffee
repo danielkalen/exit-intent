@@ -26,7 +26,9 @@ ExitIntent::attachOpeningEvents = ()->
 	###
 	unless browserInfo.isMobile # No need to attach for mobile devices
 		$(window).on "mouseleave.#{@name}", (mouseEvent)=>
-			@open() unless @disabled or Popup::isOpen or mouseEvent.clientY >= 1
+			unless @disabled or Popup::isOpen or mouseEvent.clientY >= 1
+				@open()
+				@emit 'mouseopen'
 
 
 	###*
@@ -41,7 +43,9 @@ ExitIntent::attachOpeningEvents = ()->
 		window.history.pushState {id: 'exit-control'}, '', ''
 		
 		$(window).on 'popstate', (e)=>
-			@open() if !@disabled and 'state' of window.history and window.history.state isnt null and window.history.state.id != 'exit-control'
+			if !@disabled and 'state' of window.history and window.history.state isnt null and window.history.state.id != 'exit-control'
+				@open()
+				@emit 'historyopen'
 
 
 
