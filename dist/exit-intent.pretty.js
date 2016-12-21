@@ -15,7 +15,7 @@
     this.attachMiscEvents();
     return ExitIntent.instances[this.name] = this;
   };
-  ExitIntent.version = '3.0.0';
+  ExitIntent.version = '3.0.1';
   ExitIntent.instances = {};
   ExitIntent.disableAll = function() {
     var instance, n, ref, results;
@@ -59,7 +59,8 @@
       $(window).on("mouseleave." + this.name, (function(_this) {
         return function(mouseEvent) {
           if (!(_this.disabled || Popup.prototype.isOpen || mouseEvent.clientY >= 1)) {
-            return _this.open();
+            _this.open();
+            return _this.emit('mouseopen');
           }
         };
       })(this));
@@ -82,7 +83,8 @@
       return $(window).on('popstate', (function(_this) {
         return function(e) {
           if (!_this.disabled && 'state' in window.history && window.history.state !== null && window.history.state.id !== 'exit-control') {
-            return _this.open();
+            _this.open();
+            return _this.emit('historyopen');
           }
         };
       })(this));
