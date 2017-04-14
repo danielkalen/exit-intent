@@ -46,6 +46,9 @@ ExitIntent::attachOpeningEvents = ()->
 			if !@disabled and 'state' of window.history and window.history.state isnt null and window.history.state.id != 'exit-control'
 				@open()
 				@emit 'historyopen'
+			else
+				window.history.back()
+
 
 
 
