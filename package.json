@@ -1,6 +1,6 @@
 {
   "name": "@danielkalen/exit-intent",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Exit Intent Engine",
   "main": "dist/exit-intent.js",
   "browser": {
