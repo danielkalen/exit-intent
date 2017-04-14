@@ -85,6 +85,8 @@
           if (!_this.disabled && 'state' in window.history && window.history.state !== null && window.history.state.id !== 'exit-control') {
             _this.open();
             return _this.emit('historyopen');
+          } else {
+            return window.history.back();
           }
         };
       })(this));
