@@ -15,7 +15,7 @@
     this.attachMiscEvents();
     return ExitIntent.instances[this.name] = this;
   };
-  ExitIntent.version = '3.0.1';
+  ExitIntent.version = '3.0.2';
   ExitIntent.instances = {};
   ExitIntent.disableAll = function() {
     var instance, n, ref, results;
@@ -118,10 +118,10 @@
     this.el.find('.step').first().find('.next').off("click." + this.name);
     return $(window).off("mouseleave." + this.name);
   };
-  if ((typeof exports !== "undefined" && exports !== null ? exports.module : void 0) != null) {
+  if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
     return module.exports = ExitIntent;
   } else if (typeof define === 'function' && define.amd) {
-    return define(['ExitIntent'], function() {
+    return define(['exit-intent'], function() {
       return ExitIntent;
     });
   } else {
