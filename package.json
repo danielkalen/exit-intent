@@ -2,7 +2,11 @@
   "name": "@danielkalen/exit-intent",
   "version": "3.0.1",
   "description": "Exit Intent Engine",
-  "main": "app.coffee",
+  "main": "dist/exit-intent.js",
+  "browser": {
+    "./debug": "dist/exit-intent.debug.js",
+    "./src": "src/exit-intent.coffee"
+  },
   "devDependencies": {
     "coffee-script": "^1.10.0",
     "foreach-cli": "^1.6.1",
@@ -19,8 +23,8 @@
   "scripts": {
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run build:pretty && npm run build:ugly",
-    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.pretty.js && uglifyjs dist/exit-intent.pretty.js -m -c keep_fargs,unused=false -o dist/exit-intent.js",
-    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.pretty.js && cp -f dist/exit-intent.pretty.js dist/exit-intent.js",
+    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.debug.js && uglifyjs dist/exit-intent.debug.js -m -c keep_fargs,unused=false -o dist/exit-intent.js",
+    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.debug.js && cp -f dist/exit-intent.debug.js dist/exit-intent.js",
     "watch": "simplywatch -g 'src/*' -x 'npm run build:pretty -s'"
   },
   "repository": {
