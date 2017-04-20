@@ -20,6 +20,12 @@ do ($=jQuery)->
 
 	import '_parts/browserInfo.coffee'
 	import '_parts/prototype.coffee'
-	import '_parts/export.coffee'
+	
+	if module?.exports?
+		module.exports = ExitIntent
+	else if typeof define is 'function' and define.amd
+		define ['exit-intent'], ()-> ExitIntent
+	else
+		window.ExitIntent = ExitIntent
 
 
