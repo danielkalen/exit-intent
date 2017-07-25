@@ -15,7 +15,7 @@
     this.attachMiscEvents();
     return ExitIntent.instances[this.name] = this;
   };
-  ExitIntent.version = '3.0.4';
+  ExitIntent.version = '3.0.5';
   ExitIntent.instances = {};
   ExitIntent.disableAll = function() {
     var instance, n, ref, results;
@@ -59,9 +59,10 @@
       $(document).on("mouseleave." + this.name, (function(_this) {
         return function(event) {
           if (_this.disabled || Popup.prototype.isOpen || event.relatedTarget || event.clientY >= window.innerHeight / 2) {
-            _this.open();
-            return _this.emit('mouseopen');
+            return;
           }
+          _this.open();
+          return _this.emit('mouseopen');
         };
       })(this));
     }
