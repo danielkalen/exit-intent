@@ -25,8 +25,8 @@ ExitIntent::attachOpeningEvents = ()->
 	# to outside of the viewport's Y axis.
 	###
 	unless browserInfo.isMobile # No need to attach for mobile devices
-		$(window).on "mouseleave.#{@name}", (mouseEvent)=>
-			unless @disabled or Popup::isOpen or mouseEvent.clientY >= 1
+		$(document).on "mouseleave.#{@name}", (event)=>
+			return if @disabled or Popup::isOpen or event.relatedTarget or event.clientY >= window.innerHeight/2
 				@open()
 				@emit 'mouseopen'
 
@@ -74,4 +74,4 @@ ExitIntent::detachEvents = ()->
 	@el.find('.no').off "click.#{@name}"
 	@el.find('.submit').off "click.#{@name}"
 	@el.find('.step').first().find('.next').off "click.#{@name}"
-	$(window).off "mouseleave.#{@name}"
+	$(document).off "mouseleave.#{@name}"

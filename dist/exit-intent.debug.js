@@ -56,9 +56,9 @@
     		 * to outside of the viewport's Y axis.
      */
     if (!browserInfo.isMobile) {
-      $(window).on("mouseleave." + this.name, (function(_this) {
-        return function(mouseEvent) {
-          if (!(_this.disabled || Popup.prototype.isOpen || mouseEvent.clientY >= 1)) {
+      $(document).on("mouseleave." + this.name, (function(_this) {
+        return function(event) {
+          if (_this.disabled || Popup.prototype.isOpen || event.relatedTarget || event.clientY >= window.innerHeight / 2) {
             _this.open();
             return _this.emit('mouseopen');
           }
@@ -116,7 +116,7 @@
     this.el.find('.no').off("click." + this.name);
     this.el.find('.submit').off("click." + this.name);
     this.el.find('.step').first().find('.next').off("click." + this.name);
-    return $(window).off("mouseleave." + this.name);
+    return $(document).off("mouseleave." + this.name);
   };
   if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
     return module.exports = ExitIntent;
