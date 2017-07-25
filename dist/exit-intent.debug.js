@@ -15,7 +15,7 @@
     this.attachMiscEvents();
     return ExitIntent.instances[this.name] = this;
   };
-  ExitIntent.version = '3.0.3';
+  ExitIntent.version = '3.0.4';
   ExitIntent.instances = {};
   ExitIntent.disableAll = function() {
     var instance, n, ref, results;
