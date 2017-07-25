@@ -27,8 +27,8 @@ ExitIntent::attachOpeningEvents = ()->
 	unless browserInfo.isMobile # No need to attach for mobile devices
 		$(document).on "mouseleave.#{@name}", (event)=>
 			return if @disabled or Popup::isOpen or event.relatedTarget or event.clientY >= window.innerHeight/2
-				@open()
-				@emit 'mouseopen'
+			@open()
+			@emit 'mouseopen'
 
 
 	###*
