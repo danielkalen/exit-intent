@@ -2,6 +2,7 @@ ExitIntent::open = ()->
 	@popup.open()
 	@isOpen = true
 	@disabled = true
+	@detachOpeningEvents()
 
 ExitIntent::close = ()->
 	@popup.close()
@@ -25,10 +26,12 @@ ExitIntent::attachOpeningEvents = ()->
 	# to outside of the viewport's Y axis.
 	###
 	unless browserInfo.isMobile # No need to attach for mobile devices
+		threshold = if browserInfo.isIE or browserInfo.isIE11 or browserInfo.isEdge then 125 else 15
 		$(document).on "mouseleave.#{@name}", (event)=>
-			return if @disabled or Popup::isOpen or event.relatedTarget or event.clientY >= window.innerHeight/2
-			@open()
-			@emit 'mouseopen'
+			return if @disabled or Popup::isOpen or event.relatedTarget
+			if event.clientY <= threshold
+				@open()
+				@emit 'mouseopen'
 
 
 	###*
@@ -74,4 +77,7 @@ ExitIntent::detachEvents = ()->
 	@el.find('.no').off "click.#{@name}"
 	@el.find('.submit').off "click.#{@name}"
 	@el.find('.step').first().find('.next').off "click.#{@name}"
+	@detachOpeningEvents()
+
+ExitIntent::detachOpeningEvents = ()->
 	$(document).off "mouseleave.#{@name}"
