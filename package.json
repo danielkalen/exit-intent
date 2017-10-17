@@ -4,16 +4,14 @@
   "description": "Exit Intent Engine",
   "main": "dist/exit-intent.js",
   "browser": {
-    "./debug": "dist/exit-intent.debug.js",
-    "./src": "src/exit-intent.coffee"
+    "./dist/exit-intent.js": "src/exit-intent.coffee",
+    "./src": "src/exit-intent.coffee",
+    "./debug": "dist/exit-intent.debug.js"
   },
   "devDependencies": {
-    "coffee-script": "^1.10.0",
-    "foreach-cli": "^1.6.1",
-    "json": "^9.0.4",
-    "node-sass": "^3.4.2",
-    "simplyimport": "^2.3.3",
-    "simplywatch": "^2.3.2",
+    "coffee-script": "^1.12.0",
+    "simplyimport": "^4.0.0-s35",
+    "simplywatch": "^3.0.0-l2",
     "uglify-js": "^2.6.2"
   },
   "peerDependencies": {
@@ -21,11 +19,12 @@
     "@danielkalen/popup-engine": "^3.0.0"
   },
   "scripts": {
-    "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
-    "build": "npm run build:pretty && npm run build:ugly",
-    "build:ugly": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.debug.js && uglifyjs dist/exit-intent.debug.js -m -c keep_fargs,unused=false -o dist/exit-intent.js",
-    "build:pretty": "simplyimport -i src/exit-intent.coffee | coffee -b -s -c > dist/exit-intent.debug.js && cp -f dist/exit-intent.debug.js dist/exit-intent.js",
-    "watch": "simplywatch -g 'src/*' -x 'npm run build:pretty -s'"
+    "postversion": "npm run build && git add . && git commit -a -m '[Build]'",
+    "postpublish": "git push",
+    "build": "npm run compile && npm run minify",
+    "compile": "simplyimport bundle -d src/exit-intent.coffee > dist/exit-intent.debug.js",
+    "minify": "uglifyjs dist/exit-intent.debug.js -m -c keep_fargs,unused=false -o dist/exit-intent.js",
+    "watch": "simplywatch -g 'src/*' -x 'npm run compile -s'"
   },
   "repository": {
     "type": "git",
@@ -36,5 +35,6 @@
   "bugs": {
     "url": "https://github.com/danielkalen/exit-intent/issues"
   },
-  "homepage": "https://github.com/danielkalen/exit-intent#readme"
+  "homepage": "https://github.com/danielkalen/exit-intent#readme",
+  "dependencies": {}
 }

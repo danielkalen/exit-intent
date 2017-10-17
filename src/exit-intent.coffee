@@ -14,12 +14,12 @@ do ($=jQuery)->
 
 
 
-	ExitIntent.version = import '../.version.coffee'
+	ExitIntent.version = import '../package.json $ version'
 	ExitIntent.instances = {}
 	ExitIntent.disableAll = ()-> instance.disabled = true for n,instance of ExitIntent.instances
 
-	import '_parts/browserInfo.coffee'
-	import '_parts/prototype.coffee'
+	import './_parts/browserInfo.coffee'
+	import './_parts/prototype.coffee'
 	
 	if module?.exports?
 		module.exports = ExitIntent
