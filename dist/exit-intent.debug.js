@@ -24,9 +24,7 @@ exports: {}
     this.attachMiscEvents();
     return ExitIntent.instances[this.name] = this;
   };
-  ExitIntent.version = '3.0.5';
-  
-  ;
+  ExitIntent.version = "3.1.0";
   ExitIntent.instances = {};
   ExitIntent.disableAll = function() {
     var instance, n, ref, results;
@@ -38,176 +36,16 @@ exports: {}
     }
     return results;
   };
-  var browserInfo;
+  var browserInfo, ref;
   
   browserInfo = {
     isIE: document.all && !window.atob,
     isIE11: window.navigator.msPointerEnabled,
+    isEdge: /Edge/.test(((ref = window.navigator) != null ? ref.userAgent : void 0) || ''),
     isMobile: document.documentElement.className.indexOf('mobile') !== -1
   };
   
   ;
-  var glio;
-  
-  glio = ;(function ( window , document ) {
-    var glio = {
-      /**
-       * Initial Configuration
-       * you can change the values before init method
-       * glio.config.key = value;
-       **/
-      config: {
-        screenWidthFragment: 12,  // the width of screen : 12
-        centerTopHeight: 10, // the value of height to trigger a callback on center-top
-        heightTopLeft: 30,  // the value of height when top-left direction is set
-        heightTopRight: 30, // the value of height when top-right direction is set
-      },
-      // glio methods status
-      statusTopLeft: "inactive",
-      statusTopRight: "inactive",
-      statusBottomLeft: "inactive",
-      statusBottomRight: "inactive",
-      statusTop: "inactive",
-      init: function ( ) {
-        // return a Array with the methods
-        glio.methods = Array.prototype.slice.call(arguments);
-        // get the direction and your correspondent callback
-        Array.prototype.forEach.call(glio.methods, function (index) {
-          if ( glio.getDirection( index[0], "top-left" ) ) {
-            glio.topLeftFn = glio.trigger(index[1]);
-          }
-          else if ( glio.getDirection( index[0], "top-right" ) ) {
-            glio.topRightFn = glio.trigger(index[1]);
-          }
-          else if ( glio.getDirection( index[0], "bottom-right" ) ) {
-            glio.bottomRightFn = glio.trigger(index[1]);
-          }
-          else if ( glio.getDirection( index[0], "bottom-left" ) ) {
-            glio.bottomLeftFn = glio.trigger(index[1]);
-          }
-          else if ( glio.getDirection( index[0], "top" ) ) {
-            glio.TopFn = glio.trigger(index[1]);
-          }
-        });
-        // Event mousemove just one time
-        document.body.addEventListener('mousemove', function( event ) {
-          var pointX = event.clientX
-            , pointY = event.clientY
-          ;
-          
-          if ( typeof glio.topLeftFn === "function" &&  glio.statusTopLeft === "inactive" ) {
-            glio.callTopleft(pointX, pointY, glio.topLeftFn);
-          }
-          if (typeof glio.topRightFn === "function" && glio.statusTopRight === "inactive" ) {
-            glio.callTopRight(pointX, pointY, glio.topRightFn);
-          }
-          if (typeof glio.bottomLeftFn === "function" && glio.statusBottomLeft === "inactive" ) {
-            glio.callBottomLeft(pointX, pointY, glio.bottomLeftFn);
-          }
-          if (typeof glio.bottomRightFn === "function" && glio.statusBottomRight === "inactive" ) {
-            glio.callBottomRight(pointX, pointY, glio.bottomRightFn);
-          }
-          if (typeof glio.TopFn === "function" && glio.statusTop === "inactive" ) {
-            glio.callTop(pointX, pointY, glio.TopFn);
-          }
-        });
-      },
-      // return a callback who will pass like argument to other function
-      trigger: function ( callback ) {
-          return callback;
-      },
-      // the value of top-right screen, for use when user pass the mouse in the area
-      getWidthRightValue: function ( ) {
-        var screenWidthFragment = glio.getScreenWidthFragment()
-          , topRightValue = ( screenWidthFragment * glio.config.screenWidthFragment ) - screenWidthFragment
-        ;
-        return parseInt(topRightValue);
-      },
-      // get the value of top height
-      getTopHeight: function ( ) {
-        var sHeight = 50;
-        return sHeight;
-      },
-      // The value of total screen width are divided in parts
-      getScreenWidthFragment: function () {
-        var screenWidthFragment = (parseInt(window.innerWidth) / glio.config.screenWidthFragment);
-        return screenWidthFragment;
-      },
-      // The value of total screen height are divided in parts
-      getScreenHeightFragment: function () {
-        var screenHeightFragment = (parseInt(window.innerHeight) / glio.config.screenWidthFragment);
-        return screenHeightFragment;
-      },
-       // the height value of bottom. this value is the same, independent the direction
-      getBottomHeightValue: function ( ) {
-        var screenHeightFragment = glio.getScreenHeightFragment()
-          , bottomRightValue = ( screenHeightFragment * glio.config.screenWidthFragment ) - screenHeightFragment
-        ;
-        return bottomRightValue;
-      },
-      // verify if direction who user is the same of directions who glio have
-      getDirection: function ( directionUser, direction ) {
-        if ( directionUser === direction ) {
-          return true;
-        };
-        return false;
-      },
-      /*
-       * Functions of each direction
-       */
-      callTopleft: function ( x, y, callback ) {
-        if ( x <= glio.getScreenWidthFragment() && y <= glio.config.heightTopLeft ) {
-          glio.statusTopLeft = "active";
-          callback();
-        };
-      },
-      callTopRight: function ( x, y, callback ) {
-        if ( x > glio.getWidthRightValue() && y <= glio.config.heightTopRight ) {
-          glio.statusTopRight = "active";
-          callback();
-        };         
-      },
-      callBottomRight: function ( x, y, callback ) {
-        if ( x >= glio.getWidthRightValue() && y >= glio.getBottomHeightValue() ) {
-          glio.statusBottomRight = "active";
-          callback();
-        };
-      },
-      callBottomLeft: function ( x, y, callback ) {
-        if ( x <= glio.getScreenWidthFragment() && y >= glio.getBottomHeightValue() ) {
-          glio.statusBottomLeft = "active";
-          callback();
-        };
-      },
-      // array to use in the callTop
-      positionsTopY: [],
-      callTop: function (x, y, callback ) {
-        if ( y > (glio.config.centerTopHeight + 1)) {
-          glio.positionsTopY.push(y);
-        }
-        if ( x > glio.getScreenWidthFragment() && x < glio.getWidthRightValue() ) {
-          // check if the user mouse direction is bottom to top
-          if ( y <= glio.config.centerTopHeight && glio.positionsTopY[0] > glio.config.centerTopHeight ) {
-            glio.statusTop = "active";
-            callback();
-          }
-        }
-      },
-      // return only the methods init and config
-      start: function () {
-        return {
-          init: glio.init,
-          config: glio.config
-        }
-      }
-    };
-    // return glio object
-    if (!window.glio) {
-      window.glio = glio.start();
-    };
-  
-  }( window, document));;
-  
   ExitIntent.prototype.open = function() {
     this.popup.open();
     this.isOpen = true;
@@ -236,30 +74,20 @@ exports: {}
     	 * Opens the popup if the user's mouse moves from the inside of the viewport
     	 * to outside of the viewport's Y axis.
      */
+    var threshold;
     if (!browserInfo.isMobile) {
+      threshold = browserInfo.isIE || browserInfo.isIE11 || browserInfo.isEdge ? 125 : 15;
       $(document).on("mouseleave." + this.name, (function(_this) {
         return function(event) {
-          var ref;
           if (_this.disabled || Popup.prototype.isOpen || event.relatedTarget) {
             return;
           }
-          if (event.clientY < window.innerHeight / 2 && (0 < (ref = event.clientX + 20) && ref < window.innerWidth)) {
+          if (event.clientY <= threshold) {
             _this.open();
             return _this.emit('mouseopen');
           }
         };
       })(this));
-      glio.init([
-        'top', (function(_this) {
-          return function() {
-            if (_this.disabled || Popup.prototype.isOpen) {
-              return;
-            }
-            _this.open();
-            return _this.emit('mouseopen');
-          };
-        })(this)
-      ]);
     }
   
     /**
@@ -340,4 +168,4 @@ return module.exports;
 return require(0);
 }).call(this, null);
 
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy52ZXJzaW9uLmNvZmZlZSIsIl9wYXJ0cy9icm93c2VySW5mby5jb2ZmZWUiLCJfcGFydHMvcHJvdG90eXBlLmNvZmZlZSJdLCJuYW1lcyI6WyJpbmxpbmU6MSIsImlubGluZToyIiwiaW5saW5lOjMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O3VCQUFBQTs7RUFBUUE7Ozs7Ozs7Ozs7OztFQ0FSQzs7Ozs7Ozs7RUFHdUVBO0VDSHZFQzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztFQThGdUNBIiwiZmlsZSI6ImJ1bmRsZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyInMy4wLjUnXG4iLCJicm93c2VySW5mbyA9IFxuXHRpc0lFOiBkb2N1bWVudC5hbGwgYW5kICF3aW5kb3cuYXRvYlxuXHRpc0lFMTE6IHdpbmRvdy5uYXZpZ2F0b3IubXNQb2ludGVyRW5hYmxlZFxuXHRpc01vYmlsZTogZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmNsYXNzTmFtZS5pbmRleE9mKCdtb2JpbGUnKSBpc250IC0xIiwiZ2xpbyA9IGltcG9ydCAnZ2xpb2pzJ1xuXG5FeGl0SW50ZW50OjpvcGVuID0gKCktPlxuXHRAcG9wdXAub3BlbigpXG5cdEBpc09wZW4gPSB0cnVlXG5cdEBkaXNhYmxlZCA9IHRydWVcblx0QGRldGFjaE9wZW5pbmdFdmVudHMoKVxuXG5FeGl0SW50ZW50OjpjbG9zZSA9ICgpLT5cblx0QHBvcHVwLmNsb3NlKClcblx0QGlzT3BlbiA9IGZhbHNlXG5cbkV4aXRJbnRlbnQ6OmVtaXQgPSAoZXZlbnQpLT5cblx0QGVsLnRyaWdnZXIoZXZlbnQpXG5cdEBwb3B1cC5lbWl0KGV2ZW50KVxuXG5FeGl0SW50ZW50OjpyZXBsYWNlV2l0aCA9ICgkbmV3Rm9ybSktPlxuXHRAcG9wdXAucmVwbGFjZVdpdGgoJG5ld0Zvcm0pXG5cdEBhdHRhY2hNaXNjRXZlbnRzKClcblxuXG5cblx0XHRcblxuRXhpdEludGVudDo6YXR0YWNoT3BlbmluZ0V2ZW50cyA9ICgpLT5cblx0IyMjKlxuXHQjIE9wZW5zIHRoZSBwb3B1cCBpZiB0aGUgdXNlcidzIG1vdXNlIG1vdmVzIGZyb20gdGhlIGluc2lkZSBvZiB0aGUgdmlld3BvcnRcblx0IyB0byBvdXRzaWRlIG9mIHRoZSB2aWV3cG9ydCdzIFkgYXhpcy5cblx0IyMjXG5cdHVubGVzcyBicm93c2VySW5mby5pc01vYmlsZSAjIE5vIG5lZWQgdG8gYXR0YWNoIGZvciBtb2JpbGUgZGV2aWNlc1xuXHRcdCQoZG9jdW1lbnQpLm9uIFwibW91c2VsZWF2ZS4je0BuYW1lfVwiLCAoZXZlbnQpPT5cblx0XHRcdHJldHVybiBpZiBAZGlzYWJsZWQgb3IgUG9wdXA6OmlzT3BlbiBvciBldmVudC5yZWxhdGVkVGFyZ2V0XG5cdFx0XHQjIHRhcmdldCA9IGV2ZW50LnJlbGF0ZWRUYXJnZXQgb3IgZXZlbnQudG9FbGVtZW50XG5cdFx0XHQjIHJldHVybiBpZiBub3QgdGFyZ2V0IG9yIHRhcmdldC5ub2RlTmFtZSBpc250ICdIVE1MJ1xuXHRcdFx0IyByZXR1cm4gaWYgQGRpc2FibGVkIG9yIFBvcHVwOjppc09wZW4gb3IgZXZlbnQucmVsYXRlZFRhcmdldCBvciBldmVudC5jbGllbnRZID49IHdpbmRvdy5pbm5lckhlaWdodC8yXG5cdFx0XHRpZiBldmVudC5jbGllbnRZIDwgd2luZG93LmlubmVySGVpZ2h0LzIgYW5kIDAgPCBldmVudC5jbGllbnRYKzIwIDwgd2luZG93LmlubmVyV2lkdGhcblx0XHRcdCMgaWYgbm90IHRhcmdldCBvciB0YXJnZXQubm9kZU5hbWUgaXMgJ0hUTUwnXG5cdFx0XHRcdCMgY29uc29sZS5sb2cgeTpldmVudC5jbGllbnRZLCB4OmV2ZW50LmNsaWVudFgsIGhlaWdodDp3aW5kb3cuaW5uZXJIZWlnaHQsIHdpZHRoOndpbmRvdy5pbm5lcldpZHRoXG5cdFx0XHRcdEBvcGVuKClcblx0XHRcdFx0QGVtaXQgJ21vdXNlb3BlbidcblxuXHRcdGdsaW8uaW5pdCBbJ3RvcCcsID0+XG5cdFx0XHRyZXR1cm4gaWYgQGRpc2FibGVkIG9yIFBvcHVwOjppc09wZW5cblx0XHRcdEBvcGVuKClcblx0XHRcdEBlbWl0ICdtb3VzZW9wZW4nXG5cdFx0XVxuXG5cblx0IyMjKlxuXHQjIE9wZW5zIHRoZSBwb3B1cCBpZiB0aGUgdXNlcidzIHRyaWVzIHRvIG5hdmlnYXRlIGJhY2t3YXJkcy4gV2UgYXBwbHkgYSB0cmlja1xuXHQjIHRvIHRoZSB3aW5kb3cuaGlzdG9yeSBwcm9wZXJ0eSB1c2luZyBpdHMgcmVwbGFjZVN0YXRlKCkgYW5kIHB1c2hTdGF0ZSgpIG1ldGhvZHNcblx0IyB0byByZWdpc3RlciB0aGUgcHJldmlvdXMgcGFnZSBpbiB0aGUgYnJvd3NlcidzIGhpc3RvcnkgYXMgdGhlIGN1cnJlbnQgcGFnZS4gV2Vcblx0IyB0aGVuIGxpc3RlbiB0byB0aGUgcG9wc3RhdGUgZXZlbnQgd2hpY2ggdHJpZ2dlcnMgd2hlbiB0aGUgcGFnZSBuYXZpZ2F0ZXMgYXdheS5cblx0IyBTaW5jZSBJRSBkb2Vzbid0IGZ1bGx5IHN1cHBvcnQgdGhlc2UgbWV0aG9kcywgd2UgZGlzYWJsZSB0aGVtIGNvbXBsZXRlbHkgZm9yIElFLlxuXHQjIyNcblx0dW5sZXNzIGJyb3dzZXJJbmZvLmlzSUUgb3IgYnJvd3NlckluZm8uaXNJRTExIG9yIGJyb3dzZXJJbmZvLmlzTW9iaWxlIG9yIEBkaXNhYmxlZCBvciBAaXNPcGVuXG5cdFx0d2luZG93Lmhpc3RvcnkucmVwbGFjZVN0YXRlIHtpZDogJ2V4aXQtaW5pdCd9LCAnJywgJydcblx0XHR3aW5kb3cuaGlzdG9yeS5wdXNoU3RhdGUge2lkOiAnZXhpdC1jb250cm9sJ30sICcnLCAnJ1xuXHRcdFxuXHRcdCQod2luZG93KS5vbiAncG9wc3RhdGUnLCAoZSk9PlxuXHRcdFx0aWYgIUBkaXNhYmxlZCBhbmQgJ3N0YXRlJyBvZiB3aW5kb3cuaGlzdG9yeSBhbmQgd2luZG93Lmhpc3Rvcnkuc3RhdGUgaXNudCBudWxsIGFuZCB3aW5kb3cuaGlzdG9yeS5zdGF0ZS5pZCAhPSAnZXhpdC1jb250cm9sJ1xuXHRcdFx0XHRAb3BlbigpXG5cdFx0XHRcdEBlbWl0ICdoaXN0b3J5b3Blbidcblx0XHRcdGVsc2Vcblx0XHRcdFx0d2luZG93Lmhpc3RvcnkuYmFjaygpXG5cblxuXG5cblxuXG5FeGl0SW50ZW50OjphdHRhY2hNaXNjRXZlbnRzID0gKCktPlxuXHRAZWwuZmluZCgnLm5vJykub24gXCJjbGljay4je0BuYW1lfVwiLCAoKT0+XG5cdFx0QGNsb3NlKClcblx0XHR0cnkgbG9jYWxTdG9yYWdlLnNldEl0ZW0gJ2V4aXRfaW50ZW50LWNvbXBsZXRlJywgJ3RydWUnXG5cblxuXHRAZWwuZmluZCgnLnN1Ym1pdCcpLm9uIFwiY2xpY2suI3tAbmFtZX1cIiwgKCk9PlxuXHRcdEBlbWl0ICdzdWJtaXR0ZWQnXG5cblxuXHRAZWwuZmluZCgnLnN0ZXAnKS5maXJzdCgpLmZpbmQoJy5uZXh0Jykub24gXCJjbGljay4je0BuYW1lfVwiLCAoKT0+XG5cdFx0QGVtaXQgJ2NvbnRpbnVlZCdcblxuXG5cblxuRXhpdEludGVudDo6ZGV0YWNoRXZlbnRzID0gKCktPlxuXHRAZWwuZmluZCgnLm5vJykub2ZmIFwiY2xpY2suI3tAbmFtZX1cIlxuXHRAZWwuZmluZCgnLnN1Ym1pdCcpLm9mZiBcImNsaWNrLiN7QG5hbWV9XCJcblx0QGVsLmZpbmQoJy5zdGVwJykuZmlyc3QoKS5maW5kKCcubmV4dCcpLm9mZiBcImNsaWNrLiN7QG5hbWV9XCJcblx0QGRldGFjaE9wZW5pbmdFdmVudHMoKVxuXG5FeGl0SW50ZW50OjpkZXRhY2hPcGVuaW5nRXZlbnRzID0gKCktPlxuXHQkKGRvY3VtZW50KS5vZmYgXCJtb3VzZWxlYXZlLiN7QG5hbWV9XCJcbiJdfQ==
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3BhY2thZ2UuanNvbiIsIl9wYXJ0cy9icm93c2VySW5mby5jb2ZmZWUiLCJfcGFydHMvcHJvdG90eXBlLmNvZmZlZSJdLCJuYW1lcyI6WyJpbmxpbmU6MSIsImlubGluZToyIiwiaW5saW5lOjMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O3VCQUFBQSxPQXVDRUE7Ozs7Ozs7Ozs7OztFQ3ZDRkM7Ozs7Ozs7OztFQUl1RUE7RUNKdkVDOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0VBa0Z1Q0EiLCJmaWxlIjoiYnVuZGxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXNDb250ZW50IjpbIntcbiAgXCJuYW1lXCI6IFwiQGRhbmllbGthbGVuL2V4aXQtaW50ZW50XCIsXG4gIFwidmVyc2lvblwiOiBcIjMuMS4wXCIsXG4gIFwiZGVzY3JpcHRpb25cIjogXCJFeGl0IEludGVudCBFbmdpbmVcIixcbiAgXCJtYWluXCI6IFwiZGlzdC9leGl0LWludGVudC5qc1wiLFxuICBcImJyb3dzZXJcIjoge1xuICAgIFwiLi9kaXN0L2V4aXQtaW50ZW50LmpzXCI6IFwic3JjL2V4aXQtaW50ZW50LmNvZmZlZVwiLFxuICAgIFwiLi9zcmNcIjogXCJzcmMvZXhpdC1pbnRlbnQuY29mZmVlXCIsXG4gICAgXCIuL2RlYnVnXCI6IFwiZGlzdC9leGl0LWludGVudC5kZWJ1Zy5qc1wiXG4gIH0sXG4gIFwiZGV2RGVwZW5kZW5jaWVzXCI6IHtcbiAgICBcImNvZmZlZS1zY3JpcHRcIjogXCJeMS4xMi4wXCIsXG4gICAgXCJzaW1wbHlpbXBvcnRcIjogXCJeNC4wLjAtczM1XCIsXG4gICAgXCJzaW1wbHl3YXRjaFwiOiBcIl4zLjAuMC1sMlwiLFxuICAgIFwidWdsaWZ5LWpzXCI6IFwiXjIuNi4yXCJcbiAgfSxcbiAgXCJwZWVyRGVwZW5kZW5jaWVzXCI6IHtcbiAgICBcImpxdWVyeVwiOiBcIipcIixcbiAgICBcIkBkYW5pZWxrYWxlbi9wb3B1cC1lbmdpbmVcIjogXCJeMy4wLjBcIlxuICB9LFxuICBcInNjcmlwdHNcIjoge1xuICAgIFwicG9zdHZlcnNpb25cIjogXCJucG0gcnVuIGJ1aWxkICYmIGdpdCBhZGQgLiAmJiBnaXQgY29tbWl0IC1hIC1tICdbQnVpbGRdJ1wiLFxuICAgIFwicG9zdHB1Ymxpc2hcIjogXCJnaXQgcHVzaFwiLFxuICAgIFwiYnVpbGRcIjogXCJucG0gcnVuIGNvbXBpbGUgJiYgbnBtIHJ1biBtaW5pZnlcIixcbiAgICBcImNvbXBpbGVcIjogXCJzaW1wbHlpbXBvcnQgYnVuZGxlIC1kIHNyYy9leGl0LWludGVudC5jb2ZmZWUgPiBkaXN0L2V4aXQtaW50ZW50LmRlYnVnLmpzXCIsXG4gICAgXCJtaW5pZnlcIjogXCJ1Z2xpZnlqcyBkaXN0L2V4aXQtaW50ZW50LmRlYnVnLmpzIC1tIC1jIGtlZXBfZmFyZ3MsdW51c2VkPWZhbHNlIC1vIGRpc3QvZXhpdC1pbnRlbnQuanNcIixcbiAgICBcIndhdGNoXCI6IFwic2ltcGx5d2F0Y2ggLWcgJ3NyYy8qJyAteCAnbnBtIHJ1biBjb21waWxlIC1zJ1wiXG4gIH0sXG4gIFwicmVwb3NpdG9yeVwiOiB7XG4gICAgXCJ0eXBlXCI6IFwiZ2l0XCIsXG4gICAgXCJ1cmxcIjogXCJnaXQraHR0cHM6Ly9naXRodWIuY29tL2RhbmllbGthbGVuL2V4aXQtaW50ZW50LmdpdFwiXG4gIH0sXG4gIFwiYXV0aG9yXCI6IFwiRGFuaWVsIEthbGVuXCIsXG4gIFwibGljZW5zZVwiOiBcIklTQ1wiLFxuICBcImJ1Z3NcIjoge1xuICAgIFwidXJsXCI6IFwiaHR0cHM6Ly9naXRodWIuY29tL2RhbmllbGthbGVuL2V4aXQtaW50ZW50L2lzc3Vlc1wiXG4gIH0sXG4gIFwiaG9tZXBhZ2VcIjogXCJodHRwczovL2dpdGh1Yi5jb20vZGFuaWVsa2FsZW4vZXhpdC1pbnRlbnQjcmVhZG1lXCIsXG4gIFwiZGVwZW5kZW5jaWVzXCI6IHt9XG59XG4iLCJicm93c2VySW5mbyA9IFxuXHRpc0lFOiBkb2N1bWVudC5hbGwgYW5kICF3aW5kb3cuYXRvYlxuXHRpc0lFMTE6IHdpbmRvdy5uYXZpZ2F0b3IubXNQb2ludGVyRW5hYmxlZFxuXHRpc0VkZ2U6IC9FZGdlLy50ZXN0IHdpbmRvdy5uYXZpZ2F0b3I/LnVzZXJBZ2VudCBvciAnJ1xuXHRpc01vYmlsZTogZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmNsYXNzTmFtZS5pbmRleE9mKCdtb2JpbGUnKSBpc250IC0xIiwiRXhpdEludGVudDo6b3BlbiA9ICgpLT5cblx0QHBvcHVwLm9wZW4oKVxuXHRAaXNPcGVuID0gdHJ1ZVxuXHRAZGlzYWJsZWQgPSB0cnVlXG5cdEBkZXRhY2hPcGVuaW5nRXZlbnRzKClcblxuRXhpdEludGVudDo6Y2xvc2UgPSAoKS0+XG5cdEBwb3B1cC5jbG9zZSgpXG5cdEBpc09wZW4gPSBmYWxzZVxuXG5FeGl0SW50ZW50OjplbWl0ID0gKGV2ZW50KS0+XG5cdEBlbC50cmlnZ2VyKGV2ZW50KVxuXHRAcG9wdXAuZW1pdChldmVudClcblxuRXhpdEludGVudDo6cmVwbGFjZVdpdGggPSAoJG5ld0Zvcm0pLT5cblx0QHBvcHVwLnJlcGxhY2VXaXRoKCRuZXdGb3JtKVxuXHRAYXR0YWNoTWlzY0V2ZW50cygpXG5cblxuXG5cdFx0XG5cbkV4aXRJbnRlbnQ6OmF0dGFjaE9wZW5pbmdFdmVudHMgPSAoKS0+XG5cdCMjIypcblx0IyBPcGVucyB0aGUgcG9wdXAgaWYgdGhlIHVzZXIncyBtb3VzZSBtb3ZlcyBmcm9tIHRoZSBpbnNpZGUgb2YgdGhlIHZpZXdwb3J0XG5cdCMgdG8gb3V0c2lkZSBvZiB0aGUgdmlld3BvcnQncyBZIGF4aXMuXG5cdCMjI1xuXHR1bmxlc3MgYnJvd3NlckluZm8uaXNNb2JpbGUgIyBObyBuZWVkIHRvIGF0dGFjaCBmb3IgbW9iaWxlIGRldmljZXNcblx0XHR0aHJlc2hvbGQgPSBpZiBicm93c2VySW5mby5pc0lFIG9yIGJyb3dzZXJJbmZvLmlzSUUxMSBvciBicm93c2VySW5mby5pc0VkZ2UgdGhlbiAxMjUgZWxzZSAxNVxuXHRcdCQoZG9jdW1lbnQpLm9uIFwibW91c2VsZWF2ZS4je0BuYW1lfVwiLCAoZXZlbnQpPT5cblx0XHRcdHJldHVybiBpZiBAZGlzYWJsZWQgb3IgUG9wdXA6OmlzT3BlbiBvciBldmVudC5yZWxhdGVkVGFyZ2V0XG5cdFx0XHRpZiBldmVudC5jbGllbnRZIDw9IHRocmVzaG9sZFxuXHRcdFx0XHRAb3BlbigpXG5cdFx0XHRcdEBlbWl0ICdtb3VzZW9wZW4nXG5cblxuXHQjIyMqXG5cdCMgT3BlbnMgdGhlIHBvcHVwIGlmIHRoZSB1c2VyJ3MgdHJpZXMgdG8gbmF2aWdhdGUgYmFja3dhcmRzLiBXZSBhcHBseSBhIHRyaWNrXG5cdCMgdG8gdGhlIHdpbmRvdy5oaXN0b3J5IHByb3BlcnR5IHVzaW5nIGl0cyByZXBsYWNlU3RhdGUoKSBhbmQgcHVzaFN0YXRlKCkgbWV0aG9kc1xuXHQjIHRvIHJlZ2lzdGVyIHRoZSBwcmV2aW91cyBwYWdlIGluIHRoZSBicm93c2VyJ3MgaGlzdG9yeSBhcyB0aGUgY3VycmVudCBwYWdlLiBXZVxuXHQjIHRoZW4gbGlzdGVuIHRvIHRoZSBwb3BzdGF0ZSBldmVudCB3aGljaCB0cmlnZ2VycyB3aGVuIHRoZSBwYWdlIG5hdmlnYXRlcyBhd2F5LlxuXHQjIFNpbmNlIElFIGRvZXNuJ3QgZnVsbHkgc3VwcG9ydCB0aGVzZSBtZXRob2RzLCB3ZSBkaXNhYmxlIHRoZW0gY29tcGxldGVseSBmb3IgSUUuXG5cdCMjI1xuXHR1bmxlc3MgYnJvd3NlckluZm8uaXNJRSBvciBicm93c2VySW5mby5pc0lFMTEgb3IgYnJvd3NlckluZm8uaXNNb2JpbGUgb3IgQGRpc2FibGVkIG9yIEBpc09wZW5cblx0XHR3aW5kb3cuaGlzdG9yeS5yZXBsYWNlU3RhdGUge2lkOiAnZXhpdC1pbml0J30sICcnLCAnJ1xuXHRcdHdpbmRvdy5oaXN0b3J5LnB1c2hTdGF0ZSB7aWQ6ICdleGl0LWNvbnRyb2wnfSwgJycsICcnXG5cdFx0XG5cdFx0JCh3aW5kb3cpLm9uICdwb3BzdGF0ZScsIChlKT0+XG5cdFx0XHRpZiAhQGRpc2FibGVkIGFuZCAnc3RhdGUnIG9mIHdpbmRvdy5oaXN0b3J5IGFuZCB3aW5kb3cuaGlzdG9yeS5zdGF0ZSBpc250IG51bGwgYW5kIHdpbmRvdy5oaXN0b3J5LnN0YXRlLmlkICE9ICdleGl0LWNvbnRyb2wnXG5cdFx0XHRcdEBvcGVuKClcblx0XHRcdFx0QGVtaXQgJ2hpc3RvcnlvcGVuJ1xuXHRcdFx0ZWxzZVxuXHRcdFx0XHR3aW5kb3cuaGlzdG9yeS5iYWNrKClcblxuXG5cblxuXG5cbkV4aXRJbnRlbnQ6OmF0dGFjaE1pc2NFdmVudHMgPSAoKS0+XG5cdEBlbC5maW5kKCcubm8nKS5vbiBcImNsaWNrLiN7QG5hbWV9XCIsICgpPT5cblx0XHRAY2xvc2UoKVxuXHRcdHRyeSBsb2NhbFN0b3JhZ2Uuc2V0SXRlbSAnZXhpdF9pbnRlbnQtY29tcGxldGUnLCAndHJ1ZSdcblxuXG5cdEBlbC5maW5kKCcuc3VibWl0Jykub24gXCJjbGljay4je0BuYW1lfVwiLCAoKT0+XG5cdFx0QGVtaXQgJ3N1Ym1pdHRlZCdcblxuXG5cdEBlbC5maW5kKCcuc3RlcCcpLmZpcnN0KCkuZmluZCgnLm5leHQnKS5vbiBcImNsaWNrLiN7QG5hbWV9XCIsICgpPT5cblx0XHRAZW1pdCAnY29udGludWVkJ1xuXG5cblxuXG5FeGl0SW50ZW50OjpkZXRhY2hFdmVudHMgPSAoKS0+XG5cdEBlbC5maW5kKCcubm8nKS5vZmYgXCJjbGljay4je0BuYW1lfVwiXG5cdEBlbC5maW5kKCcuc3VibWl0Jykub2ZmIFwiY2xpY2suI3tAbmFtZX1cIlxuXHRAZWwuZmluZCgnLnN0ZXAnKS5maXJzdCgpLmZpbmQoJy5uZXh0Jykub2ZmIFwiY2xpY2suI3tAbmFtZX1cIlxuXHRAZGV0YWNoT3BlbmluZ0V2ZW50cygpXG5cbkV4aXRJbnRlbnQ6OmRldGFjaE9wZW5pbmdFdmVudHMgPSAoKS0+XG5cdCQoZG9jdW1lbnQpLm9mZiBcIm1vdXNlbGVhdmUuI3tAbmFtZX1cIlxuIl19
