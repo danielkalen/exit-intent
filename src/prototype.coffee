@@ -1,18 +1,20 @@
-ExitIntent::open = ()->
+browserInfo = import './browserInfo'
+
+export open = ()->
 	@popup.open()
 	@isOpen = true
 	@disabled = true
 	@detachOpeningEvents()
 
-ExitIntent::close = ()->
+export close = ()->
 	@popup.close()
 	@isOpen = false
 
-ExitIntent::emit = (event)->
+export emit = (event)->
 	@el.trigger(event)
 	@popup.emit(event)
 
-ExitIntent::replaceWith = ($newForm)->
+export replaceWith = ($newForm)->
 	@popup.replaceWith($newForm)
 	@attachMiscEvents()
 
@@ -20,7 +22,7 @@ ExitIntent::replaceWith = ($newForm)->
 
 		
 
-ExitIntent::attachOpeningEvents = ()->
+export attachOpeningEvents = ()->
 	###*
 	# Opens the popup if the user's mouse moves from the inside of the viewport
 	# to outside of the viewport's Y axis.
@@ -57,7 +59,7 @@ ExitIntent::attachOpeningEvents = ()->
 
 
 
-ExitIntent::attachMiscEvents = ()->
+export attachMiscEvents = ()->
 	@el.find('.no').on "click.#{@name}", ()=>
 		@close()
 		try localStorage.setItem 'exit_intent-complete', 'true'
@@ -73,11 +75,11 @@ ExitIntent::attachMiscEvents = ()->
 
 
 
-ExitIntent::detachEvents = ()->
+export detachEvents = ()->
 	@el.find('.no').off "click.#{@name}"
 	@el.find('.submit').off "click.#{@name}"
 	@el.find('.step').first().find('.next').off "click.#{@name}"
 	@detachOpeningEvents()
 
-ExitIntent::detachOpeningEvents = ()->
+export detachOpeningEvents = ()->
 	$(document).off "mouseleave.#{@name}"
