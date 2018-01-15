@@ -1,4 +1,5 @@
 browserInfo = import './browserInfo'
+$ = window.jQuery
 
 export open = ()->
 	@popup.open()
@@ -28,7 +29,8 @@ export attachOpeningEvents = ()->
 	# to outside of the viewport's Y axis.
 	###
 	unless browserInfo.isMobile # No need to attach for mobile devices
-		threshold = if browserInfo.isIE or browserInfo.isIE11 or browserInfo.isEdge then 125 else 15
+		base = if browserInfo.isIE or browserInfo.isIE11 or browserInfo.isEdge then 110 else 0
+		threshold = @options.threshold + base
 		$(document).on "mouseleave.#{@name}", (event)=>
 			return if @disabled or Popup::isOpen or event.relatedTarget
 			if event.clientY <= threshold

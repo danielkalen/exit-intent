@@ -1,10 +1,11 @@
-$ = window.jQuery
+extend = import 'smart-extend'
+defaults = import './defaults'
 
 class ExitIntent
-	constructor: ({@el, name, popupOptions})->
+	constructor: ({@el, @name, options, popupOptions})->
 		return new ExitIntent(arguments[0]) if @ not instanceof ExitIntent
-		popupOptions = $.extend {forceOpen:true}, popupOptions
-		@popup = new Popup(@el, @name, popupOptions)
+		@options = extend.clone(defaults, options)
+		@popup = @createPopup(popupOptions)
 		@name = @popup.name
 		@disabled = false
 		@isOpen = false
@@ -13,6 +14,12 @@ class ExitIntent
 		@attachOpeningEvents()	
 		@attachMiscEvents()	
 		ExitIntent.instances[@name] = @
+
+	createPopup: (options)->
+		options = extend({forceOpen:true}, options)
+		popup = new Popup(@el, @name, options)
+		@name = popup.name
+		return popup
 
 	
 	@version = import '../package.json $ version'
@@ -23,7 +30,7 @@ class ExitIntent
 		return
 
 
-$.extend @::, import './prototype'
+extend @::, import './prototype'
 
 
 module.exports = ExitIntent

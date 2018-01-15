@@ -36,5 +36,7 @@
     "url": "https://github.com/danielkalen/exit-intent/issues"
   },
   "homepage": "https://github.com/danielkalen/exit-intent#readme",
-  "dependencies": {}
+  "dependencies": {
+    "smart-extend": "^1.7.3"
+  }
 }
