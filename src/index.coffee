@@ -21,6 +21,7 @@ class ExitIntent
 		@name = popup.name
 		return popup
 
+	extend @::, import './prototype'
 	
 	@version = import '../package.json $ version'
 	@instances = {}
@@ -30,7 +31,6 @@ class ExitIntent
 		return
 
 
-extend @::, import './prototype'
 
 
 module.exports = ExitIntent
