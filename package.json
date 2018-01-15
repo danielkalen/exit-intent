@@ -4,7 +4,7 @@
   "description": "Exit Intent Engine",
   "main": "dist/exit-intent.js",
   "browser": {
-    "./dist/exit-intent.js": "src/exit-intent.coffee",
+    "./dist/exit-intent.js": "src/index.coffee",
     "./src": "src/exit-intent.coffee",
     "./debug": "dist/exit-intent.debug.js"
   },
