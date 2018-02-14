@@ -24,10 +24,16 @@ export replaceWith = ($newForm)->
 		
 
 export attachOpeningEvents = ()->
-	###*
-	# Opens the popup if the user's mouse moves from the inside of the viewport
-	# to outside of the viewport's Y axis.
-	###
+	@attachMouseleaveTrigger() if @options.mouseleaveTrigger
+	@attachHistoryTrigger() if @options.historyTrigger
+
+
+
+###*
+# Opens the popup if the user's mouse moves from the inside of the viewport
+# to outside of the viewport's Y axis.
+###
+export attachMouseleaveTrigger = ()->
 	unless browserInfo.isMobile # No need to attach for mobile devices
 		base = if browserInfo.isIE or browserInfo.isIE11 or browserInfo.isEdge then 110 else 0
 		threshold = @options.threshold + base
@@ -39,13 +45,14 @@ export attachOpeningEvents = ()->
 				@emit 'mouseopen'
 
 
-	###*
-	# Opens the popup if the user's tries to navigate backwards. We apply a trick
-	# to the window.history property using its replaceState() and pushState() methods
-	# to register the previous page in the browser's history as the current page. We
-	# then listen to the popstate event which triggers when the page navigates away.
-	# Since IE doesn't fully support these methods, we disable them completely for IE.
-	###
+###*
+# Opens the popup if the user's tries to navigate backwards. We apply a trick
+# to the window.history property using its replaceState() and pushState() methods
+# to register the previous page in the browser's history as the current page. We
+# then listen to the popstate event which triggers when the page navigates away.
+# Since IE doesn't fully support these methods, we disable them completely for IE.
+###
+export attachHistoryTrigger = ()->
 	unless browserInfo.isIE or browserInfo.isIE11 or browserInfo.isMobile or @disabled or @isOpen
 		window.history.replaceState {id: 'exit-init'}, '', ''
 		window.history.pushState {id: 'exit-control'}, '', ''
@@ -56,9 +63,6 @@ export attachOpeningEvents = ()->
 				@emit 'historyopen'
 			else
 				window.history.back()
-
-
-
 
 
 

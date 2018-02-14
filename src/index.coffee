@@ -10,7 +10,7 @@ class ExitIntent
 		@disabled = false
 		@isOpen = false
 
-			
+
 		@attachOpeningEvents()	
 		@attachMiscEvents()	
 		ExitIntent.instances[@name] = @
