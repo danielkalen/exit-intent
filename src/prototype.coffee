@@ -53,7 +53,7 @@ export attachMouseleaveTrigger = ()->
 # Since IE doesn't fully support these methods, we disable them completely for IE.
 ###
 export attachHistoryTrigger = ()->
-	unless browserInfo.isIE or browserInfo.isIE11 or browserInfo.isMobile or @disabled or @isOpen
+	unless browserInfo.isIE or browserInfo.isIE11 or browserInfo.isMobile or @disabled or @isOpen or not window.history?.replaceState?
 		window.history.replaceState {id: 'exit-init'}, '', ''
 		window.history.pushState {id: 'exit-control'}, '', ''
 		
