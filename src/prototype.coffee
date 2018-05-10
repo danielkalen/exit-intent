@@ -39,7 +39,7 @@ export attachMouseleaveTrigger = ()->
 		threshold = @options.threshold + base
 
 		$(document).on "mouseleave.#{@name}", (event)=>
-			return if @disabled or Popup::isOpen or event.relatedTarget
+			return if @disabled or Popup.isOpen or event.relatedTarget
 			if event.clientY <= threshold
 				@open()
 				@emit 'mouseopen'
